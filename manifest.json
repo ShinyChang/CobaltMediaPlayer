@@ -1,0 +1,15 @@
+{
+  "name": "Cobalt Media Player",
+  "version": "0.7.0.3",
+  "description": "You can listen YouTube audio without Tab",
+  "browser_action": {
+    "default_icon": "cmp.png",
+    "popup": "popup.html"
+  },
+  "background_page": "background.html",
+  "icons": {
+    "16": "cmp.png",
+    "48": "cmp.png",
+    "128": "cmp.png"
+  }
+}

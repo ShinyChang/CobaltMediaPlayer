@@ -1,0 +1,107 @@
+<html>
+	<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+			<script type="text/javascript" src="jwplayer/jwplayer.js"></script>
+			<script type="text/javascript" src="js/suggest.js"></script>
+			<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
+	<body style="overflow-y:auto;">
+
+
+		<!--Music Title-->
+		<div class="title" style="width:500px;">
+			<span id="musicTitle" ></span>
+			<img src="img/pin.png" id="pinIcon" class="pinIcon" height="20px" width="20px" title="Open on Tab" onclick="chrome.tabs.create({'url': chrome.extension.getURL('popup.html')}, function(tab) {});" />
+		</div>
+
+		<!--Control Panel-->
+		<div style="width:500px;">
+			<table>
+				<tr>
+					<td>
+						<button id="playPrev" onClick="playlistPrev();">◄◄</button>
+					</td>
+					<td>
+						<button id="play" onClick="start();">
+							<span id="playText">►</span>
+						</button>
+					</td>
+					<td>
+						<button id="playNext" onClick="playlistNext();" >►►</button>
+					</td>
+					<td>
+						<span class="repeat" id="repeatLbl" onclick="setLoopState(this);" >Repeat</span>
+					</td>
+					<td>
+						<span class="random" id="randomLbl" onclick="setRandom();" >Random</span>
+					</td>
+					<td>
+						<image id="sound" src="img/sound.png" title="Sound" onclick="setMute();"></image>
+						<input type="range" id="Volume" style="width: 50%;" max="100" min="0" onchange="setVolume(this)"/>
+					</td>
+					<td>
+						<img src="img/new list.png" id="newListIcon" height="20px" width="20px" title="New List" style="cursor: pointer;" onclick="newList()" />
+					</td>
+					<td>
+						<img src="img/list2.png" id="listIcon" height="20px" width="20px" style="cursor: pointer;" onclick="changeListState()" />
+					</td>
+					<td>
+						<img src="img/search.gif" id="searchIcon" height="20px" width="20px" style="cursor: pointer;" onclick="changeSearchState()" />
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!--TimeBar-->
+		<div style="width:500px;">
+			<input type="range" id="TimeBar" value="0" min="0" max="1000" style="width: 80%;" onmouseup="setTime(this)"/>
+			<span class="time" id="time"></span>
+		</div>
+		
+		<!--Playlist-->
+		<div id="playlistPlaceHolder" class="list"></div>
+
+		<!--Load-->
+		<div id="searchPlaceHolder" style="width:500px;height:30px;z-index:1">
+			<table>
+			<tr style="vertical-align:top;">
+			<td>
+						<input type="text" id="smartURL" title="Enter 11 bits is Video, 16 bits is Playlist and other is direct link"/>
+						<button id="sendSmartURL" onclick="smartLoad();">Load</button>
+			</td>
+			<td>
+						<input type="search" id="searchBar" results="5" placeholder="I'm Feeling Lucky" autocomplete="on" onkeyup="preSearch(this);"></input>
+						<span id="suggestPlaceHolder" class="suggest" /></span>
+			</td>
+			<td>
+						<input id="addBtn" type="button" value="<" onclick="subStartIndex();" disabled="true" />
+						<input id="addAllBtn" type="button" value="+" title="Add all items to list" onclick="addAllItem();" disabled="true" />
+						<input id="subBtn" type="button" value=">" onclick="addStartIndex();" disabled="true" />
+			</td>
+			</tr>
+			</table>
+		</div>
+		<div id="result" class="searchResult" style="display: none;" ></div>
+
+		<!--Error Message-->
+		<div id="errorMessage" class="error" style="width: 500px;"></div>
+
+		<!--Debug and Beta-->
+		<div id="debug" style="width:500px;">
+		
+
+		
+		<script type="text/javascript" src="js/ObjectInit.js"></script>
+		<script type="text/javascript" src="js/playerControl.js"></script>
+		<script type="text/javascript" src="js/search.js"></script>
+		<script type="text/javascript" src="js/update.js"></script>
+		<script type="text/javascript">
+			updateTineBar();
+			updatePlaylist();
+			updateTitle();
+		</script>
+	</body>
+</html>
+
+
+
