@@ -3,6 +3,7 @@ A simple way to listen music in chrome browser without tab.
 
 **Update Info**
 ---
+- v0.8.0   New interface
 - v0.7.0.3 Flash player location changed
 - v0.7.0.2 Fix smartload's problem.
 - v0.7.0.1 Fix add all button's problem.
@@ -19,4 +20,6 @@ A simple way to listen music in chrome browser without tab.
 3. Add this url: 
 chrome-extension://lomkdjfdigkefccckbebcanbmndlfjjk/background.html
 
-4. Restart your chrome browser
+4. Visit chrome://plugins and disable Shockwave Flash where the type is "PPAPI"
+
+5. Restart your chrome browser

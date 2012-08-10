@@ -196,4 +196,4 @@ function updateBadge() {
 		chrome.browserAction.setBadgeText({text: "Idle"});
 	}
 }
-setInterval("updateBadge()", 1000);
+setInterval(updateBadge, 1000);

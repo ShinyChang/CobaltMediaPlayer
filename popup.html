@@ -1,107 +1,129 @@
-<html>
-	<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-			<script type="text/javascript" src="jwplayer/jwplayer.js"></script>
-			<script type="text/javascript" src="js/suggest.js"></script>
-			<link rel="stylesheet" type="text/css" href="css/style.css" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>Popup Page</title>
+		<meta name="description" content="" />
+		<meta name="author" content="Shiny" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+		<style type="text/css">
+			body{
+				min-width: 500px;
+			}
+			#searchBar{
+				height: 18px;
+				line-height: 18px;
+				margin-bottom: 0px;
+				padding: 0px;
+			}
+			.videoThumbnail{
+				width:60px;
+				height:45px;
+			}
+			#playlistContainer {
+				height: 200px;
+				overflow: auto;
+			}
+			#repeatBtn, #volumnBtn, #randomBtn{
+				background-color: #DDD;
+			}
+			#newListBtn {
+				background-color: #999;
+			}
+
+		
+		</style>
+		<script type="text/javascript" src="lib/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="lib/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/popup.js"></script>
 	</head>
-	<body style="overflow-y:auto;">
-
-
-		<!--Music Title-->
-		<div class="title" style="width:500px;">
-			<span id="musicTitle" ></span>
-			<img src="img/pin.png" id="pinIcon" class="pinIcon" height="20px" width="20px" title="Open on Tab" onclick="chrome.tabs.create({'url': chrome.extension.getURL('popup.html')}, function(tab) {});" />
+	<body width="500px">
+		<div class="container">
+			<!--SongTitle-->
+			<div class="row-fluid">
+				<div class="span12">
+					<div id="songTitleContainer"class="well"></div>
+				</div>
+			</div>
+			<!--Toolbar-->
+			<div class="row-fluid">
+				<div class="span12">
+					<ul class="pager">
+					  	<li>
+					    	<a href="#" rel="tooltip" title="Play previous" id="playPrevBtn"><i class="icon-backward"></i></a>
+					  	</li>
+					  	<li>
+					    	<a href="#" rel="tooltip" title="Play" id="playBtn"><i class="icon-play"></i></a>
+					 	</li>
+					  	<li>
+					    	<a href="#" rel="tooltip" title="Play next" id="playNextBtn"><i class="icon-forward"></i></a>
+					 	</li>
+					  	<li>
+					    	<a href="#"  rel="tooltip" title="Repeat" id="repeatBtn"><i class="icon-repeat icon-white"></i></a>
+					 	</li>
+					  	<li>
+					    	<a href="#"  rel="tooltip" title="Random" id="randomBtn"><i class="icon-random icon-white"></i></a>
+					 	</li>
+					  	<li>
+					    	<a href="#"  rel="tooltip" title="Volumn" id="volumnBtn"><i class="icon-volume-up"></i></a>
+					 	</li>
+					 	<li>
+					 		<input type="range" id="volumnBar" value="0" min="0" max="100" style="width:75px;" />
+					 	</li>
+					  	<li>
+					    	<a href="#" rel="tooltip" title="New list" id="newListBtn"><i class="icon-file"></i></a>
+					 	</li>
+					</ul>
+					
+				</div>
+			</div>
+			<!--SeekTime-->
+			<div class="row-fluid">
+				<div class="span12">
+					<input type="range" id="timeBar" value="0" min="0" max="1000" style="width:80%;float:left" />
+					<span id="now_time" style="float:left">00:00</span>
+					<span style="float:left">/</span>
+					<span id="duration_time" style="float:left">00:00</span>
+				</div>
+			</div>
+			<!--playlist-->
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="tabbable"> <!-- Only required for left/right tabs -->
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#playlistContainer" rel="tooltip" title="Playlist" data-toggle="tab"><i class="icon-list"></i></a></li>
+							<li><a href="#searchResultContainer" rel="tooltip" title="Search" data-toggle="tab"><input type="search" id="searchBar" results="5" placeholder="Search..." autocomplete="on" /></a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="playlistContainer">
+								<table class="table table-striped table-condensed">
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane" id="searchResultContainer">
+								<table class="table table-striped table-condensed">
+									<tbody>
+									</tbody>
+								</table>
+								<ul class="pager">
+								  	<li class="previous">
+								    	<a href="#" rel="tooltip" title="Previous page" id="prevBtn">&larr; Prev</a>
+								  	</li>
+								  	<li class="next">
+								    	<a href="#" rel="tooltip" title="Next page" id="nextBtn">Next &rarr;</a>
+								  	</li>
+								</ul>								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-
-		<!--Control Panel-->
-		<div style="width:500px;">
-			<table>
-				<tr>
-					<td>
-						<button id="playPrev" onClick="playlistPrev();">◄◄</button>
-					</td>
-					<td>
-						<button id="play" onClick="start();">
-							<span id="playText">►</span>
-						</button>
-					</td>
-					<td>
-						<button id="playNext" onClick="playlistNext();" >►►</button>
-					</td>
-					<td>
-						<span class="repeat" id="repeatLbl" onclick="setLoopState(this);" >Repeat</span>
-					</td>
-					<td>
-						<span class="random" id="randomLbl" onclick="setRandom();" >Random</span>
-					</td>
-					<td>
-						<image id="sound" src="img/sound.png" title="Sound" onclick="setMute();"></image>
-						<input type="range" id="Volume" style="width: 50%;" max="100" min="0" onchange="setVolume(this)"/>
-					</td>
-					<td>
-						<img src="img/new list.png" id="newListIcon" height="20px" width="20px" title="New List" style="cursor: pointer;" onclick="newList()" />
-					</td>
-					<td>
-						<img src="img/list2.png" id="listIcon" height="20px" width="20px" style="cursor: pointer;" onclick="changeListState()" />
-					</td>
-					<td>
-						<img src="img/search.gif" id="searchIcon" height="20px" width="20px" style="cursor: pointer;" onclick="changeSearchState()" />
-					</td>
-				</tr>
-			</table>
-		</div>
-
-		<!--TimeBar-->
-		<div style="width:500px;">
-			<input type="range" id="TimeBar" value="0" min="0" max="1000" style="width: 80%;" onmouseup="setTime(this)"/>
-			<span class="time" id="time"></span>
-		</div>
-		
-		<!--Playlist-->
-		<div id="playlistPlaceHolder" class="list"></div>
-
-		<!--Load-->
-		<div id="searchPlaceHolder" style="width:500px;height:30px;z-index:1">
-			<table>
-			<tr style="vertical-align:top;">
-			<td>
-						<input type="text" id="smartURL" title="Enter 11 bits is Video, 16 bits is Playlist and other is direct link"/>
-						<button id="sendSmartURL" onclick="smartLoad();">Load</button>
-			</td>
-			<td>
-						<input type="search" id="searchBar" results="5" placeholder="I'm Feeling Lucky" autocomplete="on" onkeyup="preSearch(this);"></input>
-						<span id="suggestPlaceHolder" class="suggest" /></span>
-			</td>
-			<td>
-						<input id="addBtn" type="button" value="<" onclick="subStartIndex();" disabled="true" />
-						<input id="addAllBtn" type="button" value="+" title="Add all items to list" onclick="addAllItem();" disabled="true" />
-						<input id="subBtn" type="button" value=">" onclick="addStartIndex();" disabled="true" />
-			</td>
-			</tr>
-			</table>
-		</div>
-		<div id="result" class="searchResult" style="display: none;" ></div>
-
-		<!--Error Message-->
-		<div id="errorMessage" class="error" style="width: 500px;"></div>
-
-		<!--Debug and Beta-->
-		<div id="debug" style="width:500px;">
-		
-
-		
-		<script type="text/javascript" src="js/ObjectInit.js"></script>
-		<script type="text/javascript" src="js/playerControl.js"></script>
-		<script type="text/javascript" src="js/search.js"></script>
-		<script type="text/javascript" src="js/update.js"></script>
-		<script type="text/javascript">
-			updateTineBar();
-			updatePlaylist();
-			updateTitle();
-		</script>
 	</body>
-</html>
-
-
-
+	</html>
