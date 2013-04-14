@@ -1,25 +1,23 @@
-A simple way to listen music in chrome browser without tab.
+#Cobalt Media Player
 ===
 
-**Update Info**
+##TODO
 ---
-- v0.8.0   New interface
-- v0.7.0.3 Flash player location changed
-- v0.7.0.2 Fix smartload's problem.
-- v0.7.0.1 Fix add all button's problem.
-- v0.7.0.0 Smart search support loading youtube video or direct link.
+1. Sync playlist and player setting with different devices
 
-**Have problem?**
+##Badge Text
 ---
->If it does not work, there is a solution :
+* **INIT**  : Initializing
+* **RDY!**  : Ready to play
+* **##:##** : Remaining time
+* **STOP**  : Paused
+* **WAIT**  : Playback stops because the next frame of video isn't available (might be buffering)
+* **STAL**  : Downloading has been interrupted for more than three seconds (This can indicate a network problem)
+* **ERR!**  : Fatal error
+* **EMPT**  : The video object is reset to its initial state (This may indicate a network problem)
 
-1. Visit [Flash Player - Settings Manager](http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager.html)
-
-2. Click "Global Security Settings panel"
-
-3. Add this url: 
-chrome-extension://lomkdjfdigkefccckbebcanbmndlfjjk/background.html
-
-4. Visit chrome://plugins and disable Shockwave Flash where the type is "PPAPI"
-
-5. Restart your chrome browser
+##Update Info
+---
+* v0.9 : HTML5 player, NO FLASH!!!
+* v0.8 : New interface (Bootstrap)
+* v0.7 : Flash player location changed

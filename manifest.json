@@ -1,8 +1,8 @@
 {
   "name": "Cobalt Media Player",
-  "version": "0.8.0.1",
+  "version": "0.9.0.0",
   "manifest_version": 2,
-  "description": "You can listen YouTube audio without Tab",
+  "description": "Listening YouTube audio without any tab",
   "browser_action": {
     "default_icon": "cmp.png",
     "default_popup": "popup.html"
@@ -13,11 +13,11 @@
     "128": "cmp.png"
   },
   "background": {
-    "page":"background.html"
+    "page": "background.html"
   },
   "options_page": "option.html",
-  "content_security_policy": "script-src 'self' ; object-src 'self' https://b8ddc7bd-a-62cb3a1a-s-sites.googlegroups.com;",
-  "permissions":[
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "permissions": [
     "<all_urls>"
   ]
 }

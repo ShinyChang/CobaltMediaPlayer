@@ -1,16 +1,75 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" ng-app>
 <head>
-<title></title>
+    <title>Option Page</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="lib/jquery-1.9.1.min.js"></script>
+    <script src="lib/angular.min.js"></script>
+    <script src="js/option.js"></script>
+    <style>
+        .row-fluid {
+            padding-top: 45px;
+        }
+        .row-fluid [class*="span"]:nth-child(6n+1) {
+            margin-left: 0;
+        }
+        :target {
+            margin-top: -45px;
+            padding-top: 45px;
+        }
+    </style>
 </head>
 <body>
-	<h1>Have Problme?</h1>
-	<h3>Cobalt Media Player is idle?</h3>
-	<ul>
-		<li>Check out your ineternet state</li>
-		<li>Visit <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html" target="_blank">Global Security Settings panel</a> and add url "chrome-extension://lomkdjfdigkefccckbebcanbmndlfjjk/background.html"</li>
-		<li>Visit <a href="chrome://plugins" target="_blank">Chrome Plugins</a> and disable the Shockwave Flash where the type is "PPAPI"</li>
-		<li>Restart Chrome Browser</li>
-	</ul>
-	<img src="1.png"/>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <a class="brand" href="#">Cobalt Media Player</a>
+        <div class='container'>
+            <ul ng-controller="Nav" class="nav">
+                <li ng-repeat="nav in navs">
+                    <a href='{{nav.link}}' target='{{nav.target}}'>{{nav.text}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id='badge'>
+            <legend>Badge</legend>
+            <table ng-controller="Badge" class="table">
+                <thead>
+                    <th>Badge Text</th>
+                    <th>Description</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="badge in badges" class='{{badge.level}}'>
+                      <td><strong>{{badge.status}}</strong></td>
+                      <td>{{badge.description}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id='playlist'>
+            <legend>Playlist</legend>
+            <ul ng-controller="Playlist" class="thumbnails">
+                <li ng-repeat="item in playlist" class="span2">
+                    <a class="thumbnail" href="{{item.link}}" target='_blank'>
+                        <img src="{{item.thumb}}" alt="{{item.title}}">
+                        <div style='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'><Strong>{{item.title}}</Strong></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <footer class="footer">
+        <p class="pull-right">
+            <small>
+                Powered by 
+                <a href="http://angularjs.org/" target="_blank">AngularJS</a>, 
+                <a href="http://twitter.github.io/bootstrap/" target="_blank">Bootstrap</a>
+            </small><br/>
+        </p>
+    </footer>
+</div>
 </body>
 </html>

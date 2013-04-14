@@ -4,7 +4,7 @@ var cmp = {
 	random: false,
 	mute: false,
 	playing: false,
-	volumn: 100,
+	volumn: 1,
 	listArray: [],
 	init: function() {
 		cmp.listArray = chrome.extension.getBackgroundPage().getPlaylist();
@@ -27,10 +27,9 @@ var cmp = {
 		if(cmp.mute) {
 			$("#volumnBtn").children(0).toggleClass("icon-white");
 		}
-		$("#volumnBar").attr("value", cmp.volumn);
+		$("#volumnBar").val(cmp.volumn);
 		$("#songTitleContainer").html(chrome.extension.getBackgroundPage().getPlaylistTitle());
-		var d = chrome.extension.getBackgroundPage().getDuration();
-		$("#duration_time").html(Math.floor(d/60)+":"+Math.floor(d%60));
+
 		cmp.updatePlaylist();
 		cmp.updateTitle();
 		cmp.updateTineBar();
@@ -95,9 +94,7 @@ var cmp = {
 						.click(function(){
 							var id = this.id;
 							id = id.substr(1, id.length - 1);
-							cmp.listArray.push({duration:this.getAttribute("data-dur"), file:this.getAttribute("data-fil"), image:this.getAttribute("data-ima"), title:this.getAttribute("data-tit")});
-							localStorage["playlist"] =  JSON.stringify(cmp.listArray);
-							chrome.extension.getBackgroundPage().loadPlaylistByJsArray(cmp.listArray);
+							var result = chrome.extension.getBackgroundPage().loadVideo({'duration':this.getAttribute("data-dur"), 'link':this.getAttribute("data-fil"), 'thumb':this.getAttribute("data-ima"), 'title':this.getAttribute("data-tit")});
 							cmp.updatePlaylist();
 						})
 				)
@@ -126,26 +123,24 @@ var cmp = {
 						$("<a/>")
 							.attr("rel", "tooltip")
 							.attr("id", i)
-							.attr("title", $("<img/>").attr("class", "videoThumbnail").attr("src",playlist[i].image)[0].outerHTML)
 							.html(playlist[i].title)
 							.css("cursor","pointer")
 							.click(function(){
-								console.log("GET");
-								chrome.extension.getBackgroundPage().playlistItem(this.id);
+								chrome.extension.getBackgroundPage().playItem(this.id);
 							})
 					)
 				).append(
 					$("<td/>").append(
-						$("<i/>")
-							.attr("class", "icon-remove")
-							.attr("title", "remove thie song")
+						$("<button/>")
+							.attr("class", "close")
+							.attr("title", "Remove")
 							.attr("id", "del" + i)
-							.css("cursor","pointer")
+							.html("&times;")
 							.click(function(){
-								cmp.listArray.splice(this.id.substr(3, this.id.length - 1), 1);
-								localStorage["playlist"] = JSON.stringify(cmp.listArray);
-								chrome.extension.getBackgroundPage().loadPlaylistByJsArray(cmp.listArray);		
-								cmp.updatePlaylist();
+								var _id = $(this).prop('id');
+								_id = _id.substr(3, 1);
+								chrome.extension.getBackgroundPage().removePlaylistItem(_id);
+								$(this).parents("tr").hide('fast',function(){$(this).remove();});
 							})
 					)
 				)
@@ -159,23 +154,21 @@ var cmp = {
 	updateTineBar:function() {
 
 		$("#timeBar").attr("max", chrome.extension.getBackgroundPage().getDuration())
-					 .attr("value", chrome.extension.getBackgroundPage().getPosition());
+					 .attr("value", chrome.extension.getBackgroundPage().getCurrentTime());
 
-		var max = $("#timeBar").attr("max");
-		var now = $("#timeBar").attr("value");
+		var max = chrome.extension.getBackgroundPage().timeFormat($("#timeBar").attr("max"));
+		var now = chrome.extension.getBackgroundPage().timeFormat($("#timeBar").attr("value"));
 		if($("#timeBar").attr("max") > 0) {
-			$("#now_time").html(Math.floor(now/60)+":"+Math.floor(now%60));
-			$("#duration_time").html(Math.floor(max/60)+":"+Math.floor(max%60));
+			$("#now_time").html(now);
+			$("#duration_time").html(max);
 		}
 	}
 };
 
 //document ready
 $(function(){
-	cmp.init();
 
-	//tooltip setting
-	$("a").tooltip();
+	cmp.init();
 
 	//search youtube
 	$("#searchBar").keyup(cmp.search);
@@ -186,7 +179,7 @@ $(function(){
 	//event binding
 	//player control
 	$("#playPrevBtn").click(function(){
-		chrome.extension.getBackgroundPage().playlistPrev();
+		chrome.extension.getBackgroundPage().playPrev();
 	});
 	$("#playBtn").click(function() {
 		if(cmp.playing) {
@@ -195,25 +188,22 @@ $(function(){
 			$(this).children(0).attr("class","icon-stop");
 		}
 		cmp.playing = !cmp.playing;
-		chrome.extension.getBackgroundPage().start();
+		chrome.extension.getBackgroundPage().togglePlayState();
 	});			
 	$("#playNextBtn").click(function(){
-		chrome.extension.getBackgroundPage().playlistNext();
+		chrome.extension.getBackgroundPage().playNext();
 	});	
 	$("#repeatBtn").click(function(){
 		$(this).children(0).toggleClass("icon-white");
-		cmp.repeat = !cmp.repeat;
-		chrome.extension.getBackgroundPage().setLoopState(cmp.repeat);
+		chrome.extension.getBackgroundPage().toggleLoop();
 	});
 	$("#randomBtn").click(function(){
 		$(this).children(0).toggleClass("icon-white");
-		cmp.random = !cmp.random;
-		chrome.extension.getBackgroundPage().setRandom(cmp.random);
+		chrome.extension.getBackgroundPage().toggleRandom();
 	});
 	$("#volumnBtn").click(function(){
 		$(this).children(0).toggleClass("icon-white");
-		cmp.mute = !cmp.mute;
-		chrome.extension.getBackgroundPage().setMute(cmp.mute);
+		chrome.extension.getBackgroundPage().toggleMute();
 	});
 
 	$("#volumnBar").change(function(){
@@ -221,19 +211,14 @@ $(function(){
 		chrome.extension.getBackgroundPage().setVolume(cmp.volumn);
 	});
 	$("#newListBtn").click(function(){
-		cmp.listArray =[];
-		cmp.listArray.push({duration:"296", file:"http://www.youtube.com/watch?v=3JC27eE-BPw&feature=youtube_gdata", image:"http://i.ytimg.com/vi/3JC27eE-BPw/0.jpg", title:"梁靜茹 - 愛久見人心 完整CD版"});
-		cmp.listArray.splice(0, cmp.listArray.length - 1);
-		localStorage["playlist"] = JSON.stringify(cmp.listArray);
-		chrome.extension.getBackgroundPage().loadPlaylistByJsArray(cmp.listArray);
-		cmp.updatePlaylist();
+		chrome.extension.getBackgroundPage().clearPlaylist();
 	});
 	$("#timeBar").mouseup(function(){
-		chrome.extension.getBackgroundPage().setTime($(this).val());
+		chrome.extension.getBackgroundPage().seek($(this).val());
 	});
 
 	//update
 	setInterval(cmp.updateTineBar, 500);	//update timer (every 0.5 sec)
-	setInterval(cmp.updateTitle, 1000);	//update timer (every 1 sec)
+	setInterval(cmp.updateTitle, 1000);	    //update timer (every 1 sec)
 });
 

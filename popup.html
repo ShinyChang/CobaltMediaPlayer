@@ -13,9 +13,9 @@
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 		<style type="text/css">
 			body{
-				min-width: 500px;
+				min-width: 550px;
 			}
-			#searchBar{
+			#searchBar {
 				height: 18px;
 				line-height: 18px;
 				margin-bottom: 0px;
@@ -35,14 +35,22 @@
 			#newListBtn {
 				background-color: #999;
 			}
-
+			.container{
+				width: 500px;
+			}
+			.nav{
+				margin-bottom: -1px;
+			}
+			.well {
+				margin-bottom: 0;
+			}
 		
 		</style>
-		<script type="text/javascript" src="lib/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="lib/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="lib/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/popup.js"></script>
 	</head>
-	<body width="500px">
+	<body>
 		<div class="container">
 			<!--SongTitle-->
 			<div class="row-fluid">
@@ -73,10 +81,10 @@
 					    	<a href="#"  rel="tooltip" title="Volumn" id="volumnBtn"><i class="icon-volume-up"></i></a>
 					 	</li>
 					 	<li>
-					 		<input type="range" id="volumnBar" value="0" min="0" max="100" style="width:75px;" />
+					 		<input type="range" id="volumnBar" value="0" min="0" max="1" step='0.01' style="width:75px;" />
 					 	</li>
 					  	<li>
-					    	<a href="#" rel="tooltip" title="New list" id="newListBtn"><i class="icon-file"></i></a>
+					    	<a href="#" rel="tooltip" title="Clear playlist" id="newListBtn"><i class="icon-file"></i></a>
 					 	</li>
 					</ul>
 					
@@ -85,10 +93,10 @@
 			<!--SeekTime-->
 			<div class="row-fluid">
 				<div class="span12">
-					<input type="range" id="timeBar" value="0" min="0" max="1000" style="width:80%;float:left" />
-					<span id="now_time" style="float:left">00:00</span>
-					<span style="float:left">/</span>
-					<span id="duration_time" style="float:left">00:00</span>
+					<div style='float:right'>
+						<span id="now_time">00:00</span> / <span id="duration_time">00:00</span>
+					</div>
+					<input type="range" id="timeBar" value="0" min="0" max="1000" style='display:block; width:80%'/>
 				</div>
 			</div>
 			<!--playlist-->
@@ -97,7 +105,7 @@
 					<div class="tabbable"> <!-- Only required for left/right tabs -->
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#playlistContainer" rel="tooltip" title="Playlist" data-toggle="tab"><i class="icon-list"></i></a></li>
-							<li><a href="#searchResultContainer" rel="tooltip" title="Search" data-toggle="tab"><input type="search" id="searchBar" results="5" placeholder="Search..." autocomplete="on" /></a></li>
+							<li><a href="#searchResultContainer" rel="tooltip" title="Search" data-toggle="tab"><input type="search" id="searchBar" results="5" placeholder="Search on YouTube..." autocomplete="on" /></a></li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane active" id="playlistContainer">
