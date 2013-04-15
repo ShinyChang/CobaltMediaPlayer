@@ -95,6 +95,10 @@ var cmp = {
 							var id = this.id;
 							id = id.substr(1, id.length - 1);
 							var result = chrome.extension.getBackgroundPage().loadVideo({'duration':this.getAttribute("data-dur"), 'link':this.getAttribute("data-fil"), 'thumb':this.getAttribute("data-ima"), 'title':this.getAttribute("data-tit")});
+							$("#messageBox").html(result);
+							$("#mask").show();
+							var t =  (result === "success") ? 500 : 2000;
+							$("#mask").fadeOut(t);
 							cmp.updatePlaylist();
 						})
 				)

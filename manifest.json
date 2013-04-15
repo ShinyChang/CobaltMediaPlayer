@@ -1,6 +1,6 @@
 {
   "name": "Cobalt Media Player",
-  "version": "0.9.0.0",
+  "version": "0.9.0.1",
   "manifest_version": 2,
   "description": "Listening YouTube audio without any tab",
   "browser_action": {

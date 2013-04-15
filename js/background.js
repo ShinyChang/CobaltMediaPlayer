@@ -123,7 +123,7 @@ function toggleRandom() {
 
 function toggleMute() {
     var mute = getMuteState();
-    mute(!mute);
+    setMute(!mute);
 }
 
 function clearPlaylist() {
@@ -194,13 +194,13 @@ function seek(time) {
     player.currentTime = time;
 }
 
-function mute(mute) {
+function setMute(mute) {
     localStorage.setItem('mute', mute);
-    player.mute = mute;
+    player.muted = mute;
 }
 
 function getMuteState() {
-    return player.mute;
+    return player.muted;
 }
 
 function setLoop(loop) {
@@ -270,6 +270,11 @@ function loadVideo(obj) {
     if (match) {
         // info {'realPath', 'type', 'videoID'}
         var info = getYouTubeVideoInfo(match[1]);
+
+        // reason of load fail
+        if (typeof info === 'string') {
+            return info;
+        }
         for(var key in info) {
             obj[key] = info[key];
         }
@@ -277,7 +282,7 @@ function loadVideo(obj) {
     } else {
         // TODO load direct Video
     }
-    return result;
+    return (result === true) ? "Success" : "Fail";
 }
 
 function searchYouTube(keyword, startIndex) {
@@ -390,6 +395,7 @@ function timeFormat(t) {
 /////////////////////////////////////////////////////////////////////////////////////
 // parser
 function getYouTubeVideoInfo(youtubeVideoID){
+
     if (typeof youtubeVideoID === "undefined" || youtubeVideoID === '') return null;
     
     var id        = youtubeVideoID,
@@ -407,7 +413,10 @@ function getYouTubeVideoInfo(youtubeVideoID){
         parseYouTubeVideoInfoString(data, info);
 
         // the video which is not allowed to be embedded
-        if(info['status'] === 'fail') return null;
+        if (info['status'] === 'fail') {
+            videoInfo = info['reason'];
+            return;
+        }
 
         var streams = explode(',', info['url_encoded_fmt_stream_map']);
         for(var i=0; i<streams.length; i++){
